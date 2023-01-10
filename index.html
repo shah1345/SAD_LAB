@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>Calculator</title>
+</head>
+
+
+<style>
+
+div {
+  border: 1px solid blue;
+  text-align: center;
+}
+
+#matrix {
+  border: 1px solid red;
+  margin: 0 auto;
+  padding: 5px;
+}
+
+#matrix tr,
+td {
+  padding: 5px;
+}
+
+#matrix button {
+  height: 40px;
+  width: 70px;
+  border: none;
+  font-family: helvetica;
+  font-weight: bold;
+}
+
+input {
+  height: 40px;
+  width: 495px;
+}
+
+#b1,
+#b3 {
+  background-color: rgba(255, 153, 51, 0.5);
+}
+
+#b1:hover,
+#b3:hover {
+  background-color: #ff9933;
+}
+
+#b2 {
+  background-color: rgba(15, 138, 15, 0.5);
+}
+
+#b2:hover {
+  background-color: #0f8a0f;
+}
+
+#b4 {
+  background-color: rgba(189, 15, 15, 0.6);
+}
+
+#b4:hover {
+  background-color: #bd0f0f;
+}
+
+#bEq button {
+  height: 60px;
+  width: 300px;
+  background-color: rgba(189, 15, 15, 0.6);
+}
+
+#bEq:hover {
+  background-color: #bd0f0f;
+}
+
+
+
+</style>
+
+
+
+
+
+
+<body>
+
+
+
+
+    <div>
+  
+        <input type="text" id="Result"  value ='' name="Result" disabled>
+     
+     
+     <table id="matrix">
+       <tr>
+         <td><button id="b1" onclick="submit(this);" >1</button></td>
+         <td><button id="b2" onclick="submit(this);">2</button></td>
+               <td><button id="b3" onclick="submit(this);">3</button></td>
+         <td><button id="b4" onclick="submit(this);">4</button></td>
+               <td><button id="b3" onclick="submit(this);">5</button></td>
+         <td><button id="b4" onclick="submit(this);">6</button></td>
+         
+       </tr>
+     
+       <tr>
+         <td><button id="b3" onclick="submit(this);">7</button></td>
+         <td><button id="b4" onclick="submit(this);">8</button></td>
+         <td><button id="b3" onclick="submit(this);">9</button></td>
+         <td><button id="b4" onclick="submit(this);">0</button></td>
+         <td><button id="b3" onclick="submit(this);">+</button></td>
+         <td><button id="b4" onclick="submit(this);">-</button></td>
+       </tr>
+   
+       
+       
+       <tr>
+         <td><button id="b3" onclick="submit(this);">*</button></td>
+         <td><button id="b4" onclick="submit(this);">/</button></td>
+         <td><button id="bE" onclick="submit(this);">Clr</button></td>
+         <td colspan="3"><button id="bEq" onclick="submit(this);">=</button></td>
+       
+       </tr>
+     </table>
+   </div>
+
+
+
+    
+</body>
+
+
+<script>
+
+var Display=0;
+
+var str = "";
+
+function submit(data){
+ 
+
+    var dataa = data.innerText;
+  
+  
+  if(dataa == 'Clr'){
+    str = "";
+       document.getElementById('Result').value = "";
+  
+    
+  } else if(dataa == '='){
+ 
+       document.getElementById('Result').value = eval(str);
+     str = "";
+    
+  } else{
+  
+  str += dataa;
+  
+    document.getElementById('Result').value += dataa;
+  
+  //alert(dataa);
+  
+ 
+    
+    
+    
+  
+  }
+    //console.log(data); 
+  
+}
+
+
+
+</script>
+</html>
