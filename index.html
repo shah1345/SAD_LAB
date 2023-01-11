@@ -1,3 +1,221 @@
+
+
+<?php 
+
+
+//DATABSE DETAILS//
+$DB_ADDRESS="localhost";
+$DB_USER="shahxaut_user";
+$DB_PASS="QR+O?B?QOU-.F^^B!S";
+$DB_NAME="shahxaut_DB";
+
+$conn = new mysqli($DB_ADDRESS,$DB_USER,$DB_PASS,$DB_NAME); 
+
+
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+//echo "Connected successfully";
+
+
+
+
+
+?>
+<?php
+
+include "../config.php";
+include "Sms.php";
+
+//SendSms("01774307401","hi");
+  $ReqType = $_POST['Req'];
+  
+  $MachineData = new stdClass();
+  
+  if($ReqType=="RFID"){
+      
+    $UUID = $_POST['UUID'];
+    
+   	
+    	$sql = "SELECT * FROM `Coffee` WHERE `UUID`='$UUID'";
+	$result = mysqli_query($conn, $sql);
+	if ($result->num_rows > 0) {
+		$row = mysqli_fetch_assoc($result);
+		
+		if($row['Name'] !=''){
+		    
+		    if($row['Credit']<10){
+		        
+$MachineData->Msg = "Insu";
+$Output = json_encode($MachineData);
+echo $Output;
+		    } else {
+
+$MachineData->Msg = "DONE";
+$MachineData->Name = $row['Name'];
+$MachineData->Credit = $row['Credit'];
+$MachineData->Phone = $row['Phone'];
+$MachineData->Suger = $row['Suger'];
+$MachineData->Ctype = $row['Ctype'];
+
+//$MachineData->Temp = $row['Temp'];
+//$MachineData->Level = $row['Phone'];
+
+$Output = json_encode($MachineData);
+
+echo $Output; }
+		} else {
+		    $MachineData->Msg = "REG";
+
+$Output = json_encode($MachineData);
+
+echo $Output;	
+		}
+
+    
+	} else {
+		
+	$sql = "INSERT INTO `Coffee`( `Name`, `UUID`, `Phone`, `Credit`, `Type`) VALUES ('','$UUID','',100,'Student')";
+	
+	
+	$result = mysqli_query($conn, $sql);
+	if ($result->num_rows > 0) {
+	//	$row = mysqli_fetch_assoc($result);
+	}
+
+$MachineData->Msg = "REG";
+
+$Output = json_encode($MachineData);
+
+echo $Output;	
+		
+		
+		
+	}
+    
+    
+/*$MachineData = new stdClass();
+$MachineData->Name = "Shah Newaz";
+$MachineData->Credit = 1000;
+$MachineData->Phone = "01774307401";
+
+$Output = json_encode($MachineData);
+
+echo $Output;*/
+      
+  } else if($ReqType=="Temp"){
+      
+      
+
+
+$MachineData = new stdClass();
+$MachineData->Temp = "50";
+$MachineData->Tea = "100";
+
+
+$Output = json_encode($MachineData);
+
+echo $Output;
+      
+      
+  } else if($ReqType=="Pay"){
+      
+        $UUID = $_POST['UUID'];
+        $Suger = $_POST['Sugger'];
+        $Ctype = $_POST['Type'];
+        $Ty="Normal";
+        if($Ctype==1){
+             $Ty="Normal";
+            
+        } else  $Ty="Black";
+
+        		$sql = 	"UPDATE `Coffee` SET `Credit`= Credit-10, Suger='$Suger',Ctype='$Ctype' WHERE UUID = '$UUID';";
+	
+	  
+$sql .= "INSERT INTO `Coffeesurve`(`uuid`,`Type`) VALUES ('$UUID','$Ty')";
+
+if ($conn->multi_query($sql) === TRUE) {
+			    $MachineData->Msg = "Paid";
+
+
+
+
+
+
+    	$sql = "SELECT * FROM `Coffee` WHERE `UUID`='$UUID'";
+    	while ($conn->next_result());
+	$result2 = mysqli_query($conn, $sql);
+	if ($result2->num_rows > 0) {
+		$row = mysqli_fetch_assoc($result2);
+		
+	
+		
+		if($row['Name'] !=''){
+		    
+		   if($row['Type']=='Faculty'){
+		       
+		           $msg = 'Thank U '. $row['Name'] . ' Sir We are honored to gain you as a customer.You Got Your Free Coffee' ;
+		    
+		   } else
+		    $msg = 'Thank U '. $row['Name'] . ' Sir For Ur recent purchase We are honored to gain you as a customer. Cost 10Tk New Balance '.$row['Credit'] . 'Tk' ;
+		    
+		    
+		    $otp_mobile_no =  $row['Phone'] ;
+		    
+		    	   
+		    
+		  $status = SendSms($otp_mobile_no,$msg);
+		    
+
+		     
+		    
+	
+		    
+		    
+		    
+		    
+		    
+		} else echo "name";
+	} else echo "Qprob" . $conn -> error;
+$MachineData->SMS = $status; 
+$Output = json_encode($MachineData);
+echo $Output;
+        
+   	//echo "<script>alert('Success.')</script>";
+    
+	} else echo "Prob " . $sql;
+        
+        //Show thanks 
+      
+      
+  } else echo "error";
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
